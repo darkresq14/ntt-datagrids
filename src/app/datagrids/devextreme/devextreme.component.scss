@@ -1,0 +1,25 @@
+::ng-deep .options {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep .option {
+  margin-top: 10px;
+}
+
+::ng-deep #gridContainer {
+  height: 440px;
+}
+
+::ng-deep .master-detail-caption {
+  padding: 0 0 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+

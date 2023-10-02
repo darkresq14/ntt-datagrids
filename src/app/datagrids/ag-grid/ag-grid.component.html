@@ -1,0 +1,21 @@
+<div class="mt-2">
+  <strong>Features implemented: </strong>
+  <span *ngFor="let feature of implemented; let isLast = last"
+    >{{ feature }}{{ isLast ? "" : ", " }}
+  </span>
+</div>
+<div class="my-2">
+  <strong>Features not implemented: </strong>
+  <span *ngFor="let feature of notImplemented; let isLast = last"
+    >{{ feature }}{{ isLast ? "" : ", " }}
+  </span>
+</div>
+
+<ag-grid-angular
+  style="width: calc(100vw-1px); height: 80vh"
+  class="ag-theme-alpine"
+  [rowData]="users"
+  [columnDefs]="columnDefs"
+  [defaultColDef]="defaultColDef"
+>
+</ag-grid-angular>

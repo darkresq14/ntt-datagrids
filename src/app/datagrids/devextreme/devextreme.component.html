@@ -1,0 +1,59 @@
+<div class="mt-2">
+  <strong>Features implemented: </strong>
+  <span *ngFor="let feature of implemented; let isLast = last"
+    >{{ feature }}{{ isLast ? "" : ", " }}
+  </span>
+</div>
+<div class="my-2">
+  <strong>Features not implemented: </strong>
+  <span *ngFor="let feature of notImplemented; let isLast = last"
+    >{{ feature }}{{ isLast ? "" : ", " }}
+  </span>
+</div>
+
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="users"
+  [keyExpr]="'name'"
+  [allowColumnReordering]="true"
+  [width]="'100%'"
+  [showBorders]="true"
+>
+  <dxi-column dataField="name"></dxi-column>
+  <dxi-column dataField="company"></dxi-column>
+  <dxi-column dataField="department"></dxi-column>
+  <dxi-column dataField="title"></dxi-column>
+  <dxi-column dataField="city" [groupIndex]="0"></dxi-column>
+
+  <dxo-search-panel [visible]="true"></dxo-search-panel>
+  <dxo-paging [pageSize]="15"></dxo-paging>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-grouping [autoExpandAll]="autoExpandAllVar || false"></dxo-grouping>
+  <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+  <div *dxTemplate="let user of 'detail'">
+    <div class="master-detail-caption">
+      {{ user.data.addresses[0].address }}
+    </div>
+    <dx-data-grid
+      key="address"
+      [dataSource]="user.data.addresses"
+      [showBorders]="true"
+      [columnAutoWidth]="true"
+    >
+      <dxi-column dataField="city" dataType="string"></dxi-column>
+      <dxi-column dataField="postalCode" dataType="date"></dxi-column>
+      <dxi-column dataField="state" dataType="date"></dxi-column>
+    </dx-data-grid>
+  </div>
+</dx-data-grid>
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <dx-check-box
+      id="autoExpand"
+      [(value)]="autoExpandAllVar"
+      text="Expand All Groups"
+    >
+    </dx-check-box>
+  </div>
+</div>
