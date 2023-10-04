@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserService } from 'src/app/services/user.service';
-import { UserType } from 'src/app/types/user.types';
+import { EmployeeType } from 'src/app/types/user.types';
 import { TableModule, Table } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { EmployeeService } from 'src/app/services/employee.service';
 
 interface Column {
   field: string;
@@ -36,6 +36,7 @@ export class PrimeNgComponent implements OnInit {
     'Column Toggle',
     'Global Search',
     'Filter',
+    'Filter Row',
   ];
   notImplemented = [
     'Row / Cell Edit',
@@ -46,23 +47,24 @@ export class PrimeNgComponent implements OnInit {
     'Pagination',
   ];
 
-  users: UserType[] = [];
+  employees: EmployeeType[] = [];
 
   cols!: Column[];
 
   _selectedColumns!: Column[];
 
-  constructor(private userService: UserService) {}
+  constructor(private employeeService: EmployeeService) {}
 
   ngOnInit(): void {
-    this.userService.users$.subscribe((users) => (this.users = users));
+    this.employeeService.getEmployees().subscribe((employees) => {
+      this.employees = employees;
+    });
 
     this.cols = [
+      { field: 'id', header: 'ID' },
       { field: 'name', header: 'Name' },
-      { field: 'company', header: 'Company' },
-      { field: 'department', header: 'Department' },
-      { field: 'title', header: 'Title' },
-      { field: 'city', header: 'City' },
+      { field: 'email', header: 'Email' },
+      { field: 'status', header: 'status' },
     ];
 
     this._selectedColumns = this.cols;

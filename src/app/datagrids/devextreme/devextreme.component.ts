@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserType } from 'src/app/types/user.types';
+import { UserDJType } from 'src/app/types/user.types';
 import { UserService } from 'src/app/services/user.service';
 import { DxCheckBoxModule, DxDataGridModule } from 'devextreme-angular';
 
@@ -15,7 +15,7 @@ export class DevextremeComponent implements OnInit {
   implemented = ['Record Grouping', 'Sorting', 'Global Search', 'Paging'];
   notImplemented = [];
 
-  users: UserType[] = [];
+  users: UserDJType[] = [];
   autoExpandAllVar: boolean | null | undefined = true;
 
   constructor(private userService: UserService) {}

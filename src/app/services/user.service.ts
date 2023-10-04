@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiUserType, GetUsersReturnType, UserType } from '../types/user.types';
+import {
+  ApiUserDJType,
+  GetUsersDJReturnType,
+  UserDJType,
+} from '../types/user.types';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -7,16 +11,16 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class UserService {
-  private _users = new BehaviorSubject<UserType[]>([]);
-  readonly users$: Observable<UserType[]> = this._users.asObservable();
+  private _users = new BehaviorSubject<UserDJType[]>([]);
+  readonly users$: Observable<UserDJType[]> = this._users.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): void {
+  getUsersDJ(): void {
     this.http
-      .get<GetUsersReturnType>('https://dummyjson.com/users')
+      .get<GetUsersDJReturnType>('https://dummyjson.com/users')
       .pipe(
-        map((res): UserType[] => {
+        map((res): UserDJType[] => {
           return res.users.map((user) => {
             return {
               name: `${user.firstName} ${user.lastName}`,

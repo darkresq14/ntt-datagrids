@@ -1,8 +1,29 @@
-export type GetUsersReturnType = {
-  users: ApiUserType[];
+export enum AlocariStatusEnum {
+  posibil = 'posibil',
+  respins_client = 'respins client',
+  respins_candidat = 'respins candidat',
+  propus_BL = 'propus BL',
+  propus_client = 'propus client',
+}
+
+export type EmployeeType = {
+  id: number;
+  name: string;
+  email: string;
+  alocari: Array<{
+    client: string;
+    proiect: string | null;
+    status: AlocariStatusEnum;
+    data: string;
+  }>;
+  status: boolean;
 };
 
-export type UserType = {
+export type GetUsersDJReturnType = {
+  users: ApiUserDJType[];
+};
+
+export type UserDJType = {
   name: string;
   company: string;
   department: string;
@@ -18,7 +39,7 @@ export type UserType = {
   ];
 };
 
-export type ApiUserType = {
+export type ApiUserDJType = {
   id: number;
   firstName: string;
   lastName: string;

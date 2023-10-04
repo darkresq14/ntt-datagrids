@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
-import { UserType } from 'src/app/types/user.types';
+import { UserDJType } from 'src/app/types/user.types';
 import { AgGridModule } from 'ag-grid-angular';
 import { ColDef, ColGroupDef } from 'ag-grid-community';
 
@@ -33,7 +33,7 @@ export class AgGridComponent implements OnInit {
     filter: true,
   };
 
-  users: UserType[] = [];
+  users: UserDJType[] = [];
 
   constructor(private userService: UserService) {}
 

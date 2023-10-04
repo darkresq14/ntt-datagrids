@@ -15,8 +15,20 @@
   <p-table
     #dt
     [columns]="selectedColumns"
-    [value]="users"
+    [value]="employees"
     dataKey="name"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="[
+      'name',
+      'email',
+      'alocari.client',
+      'alocari.proiect',
+      'alocari.data'
+    ]"
     [tableStyle]="{ 'min-width': '60rem' }"
   >
     <ng-template pTemplate="caption">
@@ -47,20 +59,29 @@
           <div class="flex justify-content-between align-items-center">
             {{ col.header }}
             <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <th></th>
+        <th *ngFor="let col of columns">
+          <ng-container *ngIf="col.field === 'status'; else elseTemplate">
+            <p-columnFilter type="boolean" field="status"></p-columnFilter>
+          </ng-container>
+          <ng-template #elseTemplate>
             <p-columnFilter
               type="text"
               field="{{ col.field }}"
-              display="menu"
               class="ml-auto"
             ></p-columnFilter>
-          </div>
+          </ng-template>
         </th>
       </tr>
     </ng-template>
 
     <ng-template
       pTemplate="body"
-      let-user
+      let-employee
       let-expanded="expanded"
       let-columns="columns"
     >
@@ -70,38 +91,58 @@
             type="button"
             pButton
             pRipple
-            [pRowToggler]="user"
+            [pRowToggler]="employee"
             class="p-button-text p-button-rounded p-button-plain"
             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
           ></button>
         </td>
-        <td *ngFor="let col of columns">{{ user[col.field] }}</td>
+        <td *ngFor="let col of columns; last as isLast">
+          <ng-container *ngIf="!isLast; else elseColIsLastTemplate">
+            {{ employee[col.field] }}
+          </ng-container>
+          <ng-template #elseColIsLastTemplate>
+            <i
+              class="pi"
+              [ngClass]="{
+                'text-green-500 pi-check-circle': employee.status,
+                'text-red-500 pi-times-circle': !employee.status
+              }"
+            ></i>
+          </ng-template>
+        </td>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="rowexpansion" let-user>
+    <ng-template pTemplate="rowexpansion" let-employee>
       <tr>
         <td colspan="7">
           <div class="p-3">
-            <p-table [value]="user.addresses" dataKey="address">
+            <p-table
+              [value]="employee.alocari"
+              dataKey="{`${client}${proiect}${status}${data}`}"
+            >
               <ng-template pTemplate="header">
                 <tr>
-                  <th pSortableColumn="city">
-                    City <p-sortIcon field="city"></p-sortIcon>
+                  <th pSortableColumn="client">
+                    Client <p-sortIcon field="client"></p-sortIcon>
                   </th>
-                  <th pSortableColumn="postalCode">
-                    Postal Code <p-sortIcon field="postalCode"></p-sortIcon>
+                  <th pSortableColumn="proiect">
+                    Proiect <p-sortIcon field="proiect"></p-sortIcon>
                   </th>
-                  <th pSortableColumn="state">
-                    State <p-sortIcon field="state"></p-sortIcon>
+                  <th pSortableColumn="status">
+                    Status <p-sortIcon field="status"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="data">
+                    Data <p-sortIcon field="data"></p-sortIcon>
                   </th>
                 </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-address>
+              <ng-template pTemplate="body" let-alocare>
                 <tr>
-                  <td>{{ address.city }}</td>
-                  <td>{{ address.postalCode }}</td>
-                  <td>{{ address.state }}</td>
+                  <td>{{ alocare.client }}</td>
+                  <td>{{ alocare.proiect ?? "(blank)" }}</td>
+                  <td>{{ alocare.status }}</td>
+                  <td>{{ alocare.data }}</td>
                 </tr>
               </ng-template>
               <ng-template pTemplate="emptymessage">
