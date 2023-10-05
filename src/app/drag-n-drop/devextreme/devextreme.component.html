@@ -38,7 +38,13 @@
       />
       <dxo-filter-row [visible]="true"></dxo-filter-row>
       <dxo-header-filter [visible]="true"></dxo-header-filter>
-      <dxi-column dataField="firma" sortOrder="asc"> </dxi-column>
+      <dxo-group-panel [visible]="true"></dxo-group-panel>
+      <dxo-grouping
+        [autoExpandAll]="false"
+        expandMode="rowClick"
+      ></dxo-grouping>
+      <dxi-column dataField="firma" sortOrder="asc" [groupIndex]="0">
+      </dxi-column>
       <dxi-column dataField="proiect"></dxi-column>
       <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
       <div *dxTemplate="let project of 'detail'">
