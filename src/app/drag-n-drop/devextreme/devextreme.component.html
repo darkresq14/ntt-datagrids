@@ -36,9 +36,10 @@
         [showDragIcons]="false"
         [onDragStart]="onProjectDragStart"
       />
-      <dxi-column dataField="id" dataType="number"></dxi-column>
-      <dxi-column dataField="firma" dataType="text"></dxi-column>
-      <dxi-column dataField="proiect" dataType="text"></dxi-column>
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+      <dxi-column dataField="firma" sortOrder="asc"> </dxi-column>
+      <dxi-column dataField="proiect"></dxi-column>
       <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
       <div *dxTemplate="let project of 'detail'">
         <div class="master-detail-caption">
@@ -57,8 +58,8 @@
             [showDragIcons]="false"
             [onDragStart]="onProjectDragStart"
           />
-          <dxi-column dataField="user.name" dataType="string"></dxi-column>
-          <dxi-column dataField="status" dataType="string"></dxi-column>
+          <dxi-column dataField="user.name"></dxi-column>
+          <dxi-column dataField="status"></dxi-column>
         </dx-data-grid>
       </div>
     </dx-data-grid>

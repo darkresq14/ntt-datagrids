@@ -57,11 +57,12 @@ export class DevextremeComponent {
   }
 
   onUserDragEnd(e: RowDraggingEndEvent) {
-    if (e.toData === 'projects' && e.dropInsideItem === false) {
+    if (!(e.fromData === 'users')) {
       e.cancel = true;
       return;
     }
-    if (!(e.fromData === 'users')) {
+
+    if (e.toData === 'projects' && e.dropInsideItem === false) {
       e.cancel = true;
       return;
     }
