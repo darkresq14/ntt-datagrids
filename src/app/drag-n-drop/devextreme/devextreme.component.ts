@@ -1,8 +1,10 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular';
 import { Project, User } from 'src/app/types/dragndrop.types';
 import { RowDraggingEndEvent } from 'devextreme/ui/data_grid';
+import { projects } from './projects';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-devextreme',
@@ -22,7 +24,7 @@ import { RowDraggingEndEvent } from 'devextreme/ui/data_grid';
     `,
   ],
 })
-export class DevextremeComponent implements AfterViewInit {
+export class DevextremeComponent {
   @ViewChild('projectsGrid', { static: false }) dataGrid!: DxDataGridComponent;
 
   users: Array<User> = [
@@ -43,37 +45,10 @@ export class DevextremeComponent implements AfterViewInit {
       name: 'Magdalena',
     },
   ];
-  projects: Array<Project> = [
-    {
-      id: 1,
-      firma: 'BMW',
-      aplicari: [],
-    },
-    {
-      id: 2,
-      firma: 'VW',
-      aplicari: [
-        {
-          id: 1,
-          user: {
-            id: 4,
-            name: 'Magdalena',
-          },
-          status: 'pending',
-        },
-      ],
-    },
-  ];
+  projects: Array<Project> = projects;
 
   constructor() {
     this.onUserDragEnd = this.onUserDragEnd.bind(this);
-  }
-
-  ngAfterViewInit(): void {
-    this.dataGrid.instance.expandAll(-1);
-    console.log(this.dataGrid.instance.getKeyByRowIndex(0));
-    this.dataGrid.instance.collapseAll(-1);
-    console.log(this.dataGrid.instance.getKeyByRowIndex(0));
   }
 
   onProjectDragStart(e: RowDraggingEndEvent) {
@@ -98,23 +73,35 @@ export class DevextremeComponent implements AfterViewInit {
     }
 
     if (e.toData === 'projects') {
-      const key = this.dataGrid.instance.getKeyByRowIndex(+e.toIndex);
-      projectId = key;
-      this.dataGrid.instance.expandRow(key);
+      projectId = this.dataGrid.instance.getKeyByRowIndex(+e.toIndex);
+      this.dataGrid.instance.expandRow(projectId);
     }
 
     const user = e.itemData;
     const project = this.projects.find((p) => p.id === projectId);
-    console.log('projectId', projectId);
 
     if (project) {
+      const userAlreadyInProject = project.aplicari.find(
+        (a) => a.user.id === user.id
+      );
+
+      if (userAlreadyInProject) {
+        notify(
+          `User ${user.name} is already allocated in project ${project.firma} - ${project.proiect}`,
+          'warning'
+        );
+        return;
+      }
+
       project.aplicari.push({
         id: project.aplicari.length + 1,
         user,
         status: 'NEW',
       });
+      notify(
+        `User ${user.name} added to project ${project.firma} - ${project.proiect}`,
+        'success'
+      );
     }
-
-    console.log(e);
   }
 }

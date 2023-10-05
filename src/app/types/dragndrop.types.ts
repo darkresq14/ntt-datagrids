@@ -12,5 +12,6 @@ export interface Aplicari {
 export interface Project {
   id: number;
   firma: string;
+  proiect: string;
   aplicari: Aplicari[];
 }
