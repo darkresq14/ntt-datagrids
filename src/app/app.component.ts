@@ -19,9 +19,11 @@ export class AppComponent implements OnInit {
       routerLink: '/',
       routerLinkActiveOptions: { exact: true },
     },
-    { label: 'AgGrid', routerLink: '/ag-grid' },
-    { label: 'DevExtreme', routerLink: '/devextreme' },
-    { label: 'PrimeNg', routerLink: '/prime-ng' },
+    { label: 'AgGrid', routerLink: 'datagrid/ag-grid' },
+    { label: 'DevExtreme', routerLink: 'datagrid/devextreme' },
+    { label: 'PrimeNg', routerLink: 'datagrid/prime-ng' },
+    { disabled: true, separator: true },
+    { label: 'Drag-n-Drop DevExtreme', routerLink: 'dragndrop/devextreme' },
   ];
 
   constructor(private userService: UserService) {}
