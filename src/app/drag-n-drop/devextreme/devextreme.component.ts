@@ -5,6 +5,7 @@ import { Project, User } from 'src/app/types/dragndrop.types';
 import { RowDraggingEndEvent } from 'devextreme/ui/data_grid';
 import { projects } from './projects';
 import notify from 'devextreme/ui/notify';
+import { confirm } from 'devextreme/ui/dialog';
 
 @Component({
   selector: 'app-devextreme',
@@ -27,6 +28,22 @@ import notify from 'devextreme/ui/notify';
 export class DevextremeComponent {
   @ViewChild('projectsGrid', { static: false }) dataGrid!: DxDataGridComponent;
 
+  statusObj = {
+    new: 'NEW',
+    propusBl: 'Propus BL',
+    propusClient: 'Propus Client',
+    alocarePosibila: 'Alocare posibila',
+    alocareRespinsaClient: 'Alocare respinsa client',
+    alocareRespinsaCandidat: 'Alocare respinsa candidat',
+  };
+
+  statuses = Object.keys(this.statusObj).map((key) => {
+    return {
+      key: key,
+      value: this.statusObj[key as keyof typeof this.statusObj],
+    };
+  });
+
   users: Array<User> = [
     {
       id: 1,
@@ -45,7 +62,28 @@ export class DevextremeComponent {
       name: 'Magdalena',
     },
   ];
-  projects: Array<Project> = projects;
+  projects: Array<Project> = projects.map((project) => {
+    return {
+      ...project,
+      aplicari: project.aplicari.map((aplicare) => {
+        // Find the key in statuses that matches the current status value
+        const statusKey = this.statuses.find(
+          (status) => status.value === aplicare.status
+        )?.key;
+
+        // If a matching key is found, use it as the new status
+        if (statusKey) {
+          return {
+            ...aplicare,
+            status: statusKey,
+          };
+        }
+
+        // If no matching key is found, return the aplicare without modifying the status
+        return aplicare;
+      }),
+    };
+  });
 
   constructor() {
     this.onUserDragEnd = this.onUserDragEnd.bind(this);
@@ -56,7 +94,7 @@ export class DevextremeComponent {
     return;
   }
 
-  onUserDragEnd(e: RowDraggingEndEvent) {
+  async onUserDragEnd(e: RowDraggingEndEvent) {
     if (!(e.fromData === 'users')) {
       e.cancel = true;
       return;
@@ -94,15 +132,22 @@ export class DevextremeComponent {
         return;
       }
 
-      project.aplicari.push({
-        id: project.aplicari.length + 1,
-        user,
-        status: 'NEW',
-      });
-      notify(
-        `User ${user.name} added to project ${project.firma} - ${project.proiect}`,
-        'success'
+      const confirmed = await confirm(
+        `Are you sure you want to add ${user.name} to project ${project.firma} - ${project.proiect}`,
+        'Confirm Changes'
       );
+      if (confirmed) {
+        project.aplicari.push({
+          id: project.aplicari.length + 1,
+          user,
+          status: 'new',
+        });
+
+        notify(
+          `User ${user.name} added to project ${project.firma} - ${project.proiect}`,
+          'success'
+        );
+      }
     }
   }
 }

@@ -64,8 +64,20 @@
             [showDragIcons]="false"
             [onDragStart]="onProjectDragStart"
           />
-          <dxi-column dataField="user.name"></dxi-column>
-          <dxi-column dataField="status"></dxi-column>
+          <dxo-editing
+            mode="cell"
+            [allowUpdating]="true"
+            [allowDeleting]="true"
+          />
+          <dxi-column dataField="user.name" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="status">
+            <dxo-lookup
+              [dataSource]="statuses"
+              displayExpr="value"
+              valueExpr="key"
+            >
+            </dxo-lookup>
+          </dxi-column>
         </dx-data-grid>
       </div>
     </dx-data-grid>
